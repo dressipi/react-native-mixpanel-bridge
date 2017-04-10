@@ -105,6 +105,20 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSData *)deviceToken) {
     [mixpanel.people addPushDeviceToken:deviceToken];
 }
 
+RCT_EXPORT_METHOD(addPushDeviceTokenWithString:(NSString *)pushDeviceToken) {
+     NSMutableData *deviceToken = [[NSMutableData alloc] init];
+     unsigned char whole_byte;
+     char byte_chars[3] = {'\0','\0','\0'};
+     int i;
+     for (i=0; i < [pushDeviceToken length]/2; i++) {
+         byte_chars[0] = [pushDeviceToken characterAtIndex:i*2];
+         byte_chars[1] = [pushDeviceToken characterAtIndex:i*2+1];
+         whole_byte = strtol(byte_chars, NULL, 16);
+         [deviceToken appendBytes:&whole_byte length:1];
+     }
+     [mixpanel.people addPushDeviceToken:deviceToken];
+ }
+
 RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken) {
     [mixpanel.people removePushDeviceToken:deviceToken];
 }
