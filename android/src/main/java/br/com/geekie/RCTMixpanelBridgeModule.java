@@ -261,6 +261,20 @@ public class RCTMixpanelBridgeModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
+    public void getSuperProperty(final String property, Callback callback) {
+        String[] prop = new String[1];
+
+        try {
+            JSONObject currProps = mixpanel.getSuperProperties();
+            prop[0] = currProps.getString(property);
+            callback.invoke(prop);
+        } catch (JSONException e) {
+            prop[0] = null;
+            callback.invoke(prop);
+        }
+    }
+
+    @ReactMethod
     public void getDistinctId(Callback callback) {
         callback.invoke(mixpanel.getDistinctId());
     }
